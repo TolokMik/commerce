@@ -2,6 +2,15 @@
 
 {% block body %}
     <h2>Active Listings</h2>
-
-    TODO
+   <div class="container">
+       <div class="row">
+            {% for st in staff %}
+                <div class="col-sm"> 
+                    <div> {{st.image_data}}</div>
+                    <p>id: {{st.id}} <a href='#'>{{st.staffname}}</a> price: {{st.startprice}} owner: {{st.staff_owner}}</p></div>
+            {% empty %}
+                <p> no items in auction </p>
+            {% endfor %}
+        </div>     
+     </div>
 {% endblock %}
