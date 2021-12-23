@@ -8,7 +8,7 @@
             {% for st in staff %}
                 <div class="col-md-3 col-xs-6"> 
                     <div> {{st.image_data}}</div>
-                    <p>id: {{st.id}} <a href='#'>{{st.staffname}}</a> price: {{st.startprice}} owner: {{st.staff_owner}}</p>
+                    <p>id: {{st.id}} <a href='{% url "staff_id" st.id %}'>{{st.staffname}}</a> price: {{st.startprice}} owner: {{st.staff_owner}}</p>
                 </div>
             {% empty %}
                 <p> no items in auction </p>

@@ -1,0 +1,36 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    
+   <div class="container"> 
+       <h3>{{staff_item.staffname}}</h3> 
+       <div class="row">
+            <div class="col-md-12"> 
+                <div> <img src="../media/{{staff_item.image_one}}" width="400px"></div>
+                <br/>
+                <div>
+                    <p>{{staff_item.staff_descript}}</p> 
+                </div> 
+                <p>price: {{staff_item.startprice}}</p> 
+                <p>owner: {{staff_item.staff_owner}}</p>  
+                
+            </div>
+            <div class="col-md-12"> 
+                {% for proposition in propositions %}
+                    <p>{{proposition.person_id}}</p>
+                    <p>{{proposition.price}}</p>
+                {% empty %}
+                    <p>No propositions</p>
+                {% endfor %}
+            </div>
+            {% if user.is_authenticated and user != staff_item.staff_owner %}
+                Add proposition:
+                <form action "addprop" method="post">
+                    <input value="22" name="newprice">
+                    <input type="submit" value="ADD">
+                </form>
+                Signed in as <strong>{{ user.username }}</strong>.
+            {% endif %}
+        </div>     
+     </div>
+{% endblock %}

@@ -1,5 +1,6 @@
 from django.contrib.auth import authenticate, login, logout, models
 from django.db import IntegrityError
+from django.db.models import fields
 from django.db.models.fields import FloatField
 #from django.forms.models import _Labels
 from django.http import HttpResponse, HttpResponseRedirect
@@ -93,5 +94,35 @@ def add_listing(request):
         "listingform": staff_form
     })
 
+class AddSumForm(forms.Form):
+    add_sum = fields.FloatField(default=1.0)  
+      
+#--------------------------------------------------------------
+def staff_one(request, staff_id):
+    staff_item = Staff.objects.get(id=staff_id)
+    max_prop = staff_item.startprice
+    price_max = Propositions.objects.aggregate('price')
+    if price_max and max_prop < price_max:
+        max_prop = price_max
+    if request.method == "POST":
+        add_form = AddSumForm(request.POST)
+        if add_form.is_valid():
+            newprop = add_form.changed_data['add_sum']
+            newprop_obj = Propositions.objects.create(price=newprop, )
+
+    propositions = Propositions.objects.filter(staff_id=staff_id)
+    return render(request, "auctions/staffone.html", {
+        "staff_item": staff_item, "propositions": propositions, "adddorm": add_form
+    })
+
+#----------------------------------------------------------------
+def add_proposition(request, staff_id, summ_add):
+    staff_item = Staff.objects.get(id=staff_id)
+
+    return render(request, "auctions/staffone.html", {
+        "staff_item": staff_item, "newprice": summ_add, 
+        "addform": 
+    })
+        
 
 
