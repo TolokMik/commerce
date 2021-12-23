@@ -5,24 +5,18 @@ from django.db.models.fields import FloatField
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
-
 from .models import User, Staff, Propositions
+from PIL import Image
 from django import forms
+
+#Bound form with an image field
 
 
 def index(request):
-    staff = Staff.objects.get(id=3)
-    #staff.startprice =1000
-    #staff.save()
-    staff2 = Staff.objects.get(id=4)
-    #staff2.startprice =899
-    #staff2.save()
-    
-    return render(request, "auctions/index.html",{
-        "staff": [staff, staff2]
+    staff = Staff.objects.all()
+    return render(request, "auctions/index.html", {
+        "staff": staff
     })
-
-
 def login_view(request):
     if request.method == "POST":
 
@@ -47,7 +41,7 @@ def logout_view(request):
     logout(request)
     return HttpResponseRedirect(reverse("index"))
 
-
+#----------------------------------------------------------------
 def register(request):
     if request.method == "POST":
         username = request.POST["username"]
@@ -76,11 +70,11 @@ def register(request):
 
 class Staff_Form(forms.Form):
     staff_name = forms.CharField(label="Staff name", max_length=64)
-    staff_descript = forms.CharField(label="Description", max_length=200)
+    staff_descript = forms.CharField(label="Description", widget=forms.Textarea)
     start_price = forms.FloatField(label='Start price')
-    staff_photo = forms.ImageField(label="Add staff photo")
+    staff_photo = forms.ImageField(label="Add staff photo", required=False)
 
-
+#-------------------------------------------------------------
 def add_listing(request):
     if request.method == "POST":
         staff_form = Staff_Form(request.POST, request.FILES)
@@ -90,7 +84,7 @@ def add_listing(request):
             start_price = staff_form.cleaned_data['start_price']
             staff_photo = staff_form.cleaned_data['staff_photo']
             current_user = request.user
-            new_staff = Staff.objects.create(staffname=staff_name, staff_descript=staff_descript, startprice=start_price, image_one=staff_photo, staff_owner=current_user.id )
+            new_staff = Staff.objects.create(staffname=staff_name, staff_descript=staff_descript, startprice=start_price, image_one=staff_photo,  staff_owner=current_user )
             new_staff.save()
     else:
         staff_form = Staff_Form()
@@ -98,4 +92,6 @@ def add_listing(request):
     return render(request, "auctions/add_listing.html", { 
         "listingform": staff_form
     })
+
+
 

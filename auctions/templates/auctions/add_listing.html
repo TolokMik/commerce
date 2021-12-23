@@ -4,12 +4,11 @@
     <h2>Add listing</h2>
    <div class="container">
        <div class="row">
-          <form  method="post"  action="add_listing">
-          {% csrf_token %}  
-           {{listingform}}
-       
-                 
-              <input type="submit" title="ADD">
+            <!-- <form  method="post"  action="add_listing"> -->
+            <form enctype="multipart/form-data" method="post" action="add_listing">
+                {% csrf_token %}  
+                {{listingform.as_p}}
+                <input type="submit" title="ADD">
           </form>
         </div>     
      </div>
